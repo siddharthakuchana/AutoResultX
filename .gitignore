@@ -1,0 +1,12 @@
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore Excel output
+results.xlsx
+
+# Ignore drivers
+chromedriver.exe
+
+# Ignore virtual env (if any)
+venv/
