@@ -2,6 +2,8 @@
 
 Automated University Result Extraction using Python & Selenium.
 
+highly recommended to analyze the data and efficient web scrapping 
+
 ## Features
 - Automatic roll number generation
 - Handles JavaScript-based result pages
