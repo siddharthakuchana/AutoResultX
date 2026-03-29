@@ -23,3 +23,5 @@ highly recommended to analyze the data and efficient web scrapping
 
 2. Run the project  
    python main.py
+
+3. The result goes to excel provided in the code
