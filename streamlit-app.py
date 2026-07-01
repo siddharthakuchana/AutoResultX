@@ -9,7 +9,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from webdriver_manager.chrome import ChromeDriverManager
 
-# --- HELPER FUNCTIONS ---
+# --- 1. CORE UTILITY FUNCTIONS (Integrated) ---
 
 def generate_roll_numbers(base_roll, start, end, extra_rolls_str):
     """Generates a sorted, unique list of roll numbers."""
@@ -23,13 +23,13 @@ def generate_roll_numbers(base_roll, start, end, extra_rolls_str):
 def get_headless_driver():
     """Initializes a headless Selenium driver compatible with server deployments."""
     options = Options()
-    options.add_argument("--headless=new")  # Critical for cloud deployment
+    options.add_argument("--headless=new")  # Critical for Streamlit Cloud
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920,1080")
     
-    # Automatically manages the driver binary without local paths
+    # Automatically downloads/caches the correct chromedriver binary
     service = Service(ChromeDriverManager().search())
     return webdriver.Chrome(service=service, options=options)
 
@@ -37,7 +37,7 @@ def fetch_result(driver, roll_number):
     """Fetches SGPA and Result for a given roll number."""
     try:
         driver.refresh()
-        time.sleep(4)  # Reduced slightly to optimize, adjust if server is slow
+        time.sleep(4)  # Wait for page refresh
 
         # Send roll number at page level
         body = driver.switch_to.active_element
@@ -80,7 +80,7 @@ def fetch_result(driver, roll_number):
             "Result": f"Error: {str(e)}"
         }
 
-# --- STREAMLIT UI ---
+# --- 2. STREAMLIT USER INTERFACE ---
 
 st.set_page_config(page_title="JNTUH Result Scraper", page_icon="📊", layout="centered")
 
@@ -139,7 +139,7 @@ if st.button("🚀 Generate and Fetch Results", type="primary"):
             st.subheader("📋 Results Preview")
             st.dataframe(df)
             
-            # Generate memory-based Excel download button (doesn't leave file clutter on the server)
+            # Generate memory-based Excel download button
             buffer = BytesIO()
             with pd.ExcelWriter(buffer, engine='openpyxl') as writer:
                 df.to_excel(writer, index=False, sheet_name='Results')
